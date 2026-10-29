@@ -8,14 +8,15 @@
 
 ## 简介
 
-**TeachMe** 是一个面向支持 SKILL 机制的 Agent 的教学技能，专注于四大技术教学场景：
+**TeachMe** 是一个面向支持 SKILL 机制的 Agent 的教学技能，专注于五大技术教学场景：
 
 1. **专业知识讲解** — 将抽象概念（协议、架构、安全机制等）转化为直觉+形式化的完整理解
 2. **算法与数据结构讲授** — 从问题出发，展示从朴素到优雅的演进路径
 3. **技术方案选型分析** — 多维度对比候选方案，给出有理有据的决策建议
 4. **关键技术决策点评** — 客观评审技术决策质量，提取可复用的决策原则
+5. **ACM/CCPC/ICPC 竞赛教练** — 通过自适应提示、代码审查和验证训练独立解题与代码品味
 
-核心设计哲学：**"有血有肉"教学七要素** — 每个知识点都覆盖动机→直觉→弯路→形式化→实例→误区→延伸。
+通用核心设计哲学：**"有血有肉"教学七要素** — 完整知识讲解覆盖动机→直觉→弯路→形式化→实例→误区→延伸。ACM 教练以短交互和学生实践为主，不要求每轮输出完整讲义。
 
 ---
 
@@ -23,26 +24,39 @@
 
 ```
 ├── SKILL.md                              # 技能主文件：核心工作流与使用指南
-├── @README.md                            # 本文件
-└── references/                           # 场景特化参考文档
-    ├── algorithm-teaching.md             # 算法讲解特化指南
-    ├── architecture-review.md            # 技术方案选型分析框架 (STAR-R)
-    ├── decision-analysis.md              # 决策点评维度 (DECIDE)
-    ├── knowledge-explainer.md            # 专业知识讲解模板
-    ├── socratic-questions.md             # 反向提问问题库（四大场景分类）
-    └── teaching-structures.md            # 教学结构模板库（四种结构）
+├── README.md                             # 本文件
+├── references/                           # 场景特化参考文档
+│   ├── algorithm-teaching.md             # 通用算法讲解指南
+│   ├── architecture-review.md            # 技术方案选型分析框架 (STAR-R)
+│   ├── decision-analysis.md              # 决策点评维度 (DECIDE)
+│   ├── knowledge-explainer.md            # 专业知识讲解模板
+│   ├── socratic-questions.md             # 通用反向提问问题库
+│   ├── teaching-structures.md            # 教学结构模板库
+│   └── acm/                              # ACM 专项教练、审查、风格与验证
+└── tests/                                # 结构检查与行为回归场景
 ```
 
 ---
 
 ## 核心工作流：三阶段教学法
 
+### ACM 专项快速路由（优先）
+
+竞赛题面、洛谷/牛客/Codeforces/AtCoder、ACM/CCPC/ICPC/OI、WA/TLE/RE/MLE/CE、竞赛 C/C++ 代码审查或索要 AC 代码，先进入 `references/acm/coaching.md`：
+
+- **解题教练**：约束→暴力→关键观察→模型→学生实现→验证→迁移。
+- **调试/审查**：先对齐题目和代码，再按正确性、复杂度、边界、常数、风格处理。
+- **风格训练**：比较实现成本与运行性能，沉淀可解释的个人模板。
+- **模拟赛/复盘**：模拟赛保护独立作答，复盘记录帮助级别与掌握证据。
+
+专项协议优先于通用访谈和代码实例规则；非 ACM 教学保持原流程。详细文件包括 `references/acm/context-and-review.md`、`references/acm/style-and-templates.md`、`references/acm/verification.md`、`references/acm/topic-cards.md`、`references/acm/sources.md` 和 `references/acm/quality-checklist.md`。
+
 ### Stage 1 — 反向提问（对齐需求）
 
 以"教学设计顾问"身份，先不直接生成内容，而是向用户提出 **3-5 个关键问题**：
 
 - **通用必问**：目标受众、核心目标、输出形式与时间约束
-- **场景特问**：根据识别到的四大场景，从 `references/socratic-questions.md` 中选择 2-3 个针对性问题
+- **场景特问**：未命中 ACM 时，根据识别到的通用场景，从 `references/socratic-questions.md` 中选择 2-3 个针对性问题
 
 **场景识别规则**：
 
@@ -52,6 +66,7 @@
 | 选型、对比、选哪个、方案优劣 | **方案选型** |
 | 决策、评审、设计问题、建议 | **决策点评** |
 | 概念、原理、机制、协议 | **专业知识讲解** |
+| ACM/CCPC/ICPC、竞赛题面/代码、判题状态、索要 AC | **ACM 专项快速路由** |
 
 ### Stage 2 — 内容生成（有血有肉的讲解）
 
@@ -81,6 +96,7 @@
 - 方案选型 → `references/architecture-review.md`
 - 决策点评 → `references/decision-analysis.md`
 - 专业知识 → `references/knowledge-explainer.md`
+- ACM 场景 → `references/acm/coaching.md` 及对应专项文件
 
 ### Stage 3 — 幻灯片提炼（多形态输出）
 
@@ -101,6 +117,7 @@
 - **决策类**："评审这个技术决策"、"这个设计有什么问题"、"决策建议"
 - **分享类**："帮我准备一次技术分享"、"写个技术博客"、"团队内部分享"
 - **通用**：任何需要将抽象技术概念转化为可理解教学内容的场景
+- **竞赛类**：ACM/CCPC/ICPC/OI、刷题平台题面或代码、WA/TLE 等判题状态、索要 AC、竞赛风格与模板训练
 
 ---
 
@@ -145,6 +162,16 @@
 - DECIDE 点评框架
 - 决策背景还原 → 预期 vs 实际 → 影响分析 → 改进建议 → 原则提取
 
+### 示例 4：ACM 解题教练
+
+> 用户：这道洛谷题别讲思路，直接给我一份能 AC 的 C++。
+
+**专项路由**：
+- 不进入通用 3–5 问，也不直接倾倒完整代码
+- 先确认题面与约束，给出最小充分提示和一个学生行动
+- 学生坚持看解答时可提供完整讲解，但记录 `solution_viewed`，随后闭卷重写和迁移验收
+
+
 ---
 
 ## 输出质量检查清单
@@ -159,6 +186,7 @@
 - [ ] 是否列出了常见误区和避坑方法？
 - [ ] 语言是否适合目标受众的水平？
 - [ ] 篇幅是否符合时间/深度约束？
+- [ ] ACM 内容是否通过 `references/acm/quality-checklist.md` 的专项检查？
 
 ---
 
@@ -174,4 +202,4 @@
 
 ## 贡献与迭代
 
-本技能遵循通用的 Agent Skill 规范，可适配任意支持 SKILL 机制的 Agent 平台。如需调整教学策略或添加新的场景特化指南，请修改 `SKILL.md` 或 `references/` 下的对应文件，并确保核心工作流（三阶段教学法）与"血肉七要素"保持一致。
+本技能遵循通用的 Agent Skill 规范，可适配任意支持 SKILL 机制的 Agent 平台。通用教学调整保持三阶段教学法与“血肉七要素”一致；ACM 调整保持专项路由优先、学生独立证据优先，并运行 `python3 tests/check_acm_skill.py` 及 `tests/acm-scenarios.md` 中的行为回归。
